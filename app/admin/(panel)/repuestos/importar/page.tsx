@@ -1,0 +1,1 @@
+import { AdminTopbar } from '@/components/AdminTopbar';import { CsvImporter } from '@/components/CsvImporter';export default function Page(){return <><AdminTopbar title="Importar repuestos" subtitle="Carga varios repuestos desde un archivo CSV"/><div className="admin-content"><CsvImporter/></div></>}

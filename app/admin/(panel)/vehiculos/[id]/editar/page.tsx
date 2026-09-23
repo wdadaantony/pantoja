@@ -1,0 +1,2 @@
+import { notFound } from 'next/navigation';import { AdminTopbar } from '@/components/AdminTopbar';import { VehicleForm } from '@/components/VehicleForm';import { vehiculos } from '@/lib/data';
+export default async function Page({params}:{params:Promise<{id:string}>}){const {id}=await params;const v=vehiculos.find(x=>x.id===id);if(!v)notFound();return <><AdminTopbar title={`Editar ${v.nombre}`} subtitle="Actualiza la información del vehículo"/><div className="admin-content form-content"><VehicleForm vehicle={v}/></div></>}

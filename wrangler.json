@@ -1,0 +1,14 @@
+{
+  "name": "pantoja-trabajo",
+  "main": "dist/server/index.js",
+  "compatibility_date": "2026-05-15",
+  "assets": {
+    "directory": "dist/client"
+  },
+  "vars": {
+    "NEXT_PUBLIC_SITE_URL": "https://pantoja-trabajo.no-ti-on-2600.workers.dev",
+    "NEXT_PUBLIC_SUPABASE_URL": "https://pefferyaukqvldxdxkkb.supabase.co",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBlZmZlcnlhdWtxdmxkeGR4a2tiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc4NDkxMzAsImV4cCI6MjEwMzQyNTEzMH0.n_GF7k1oHUOF1A6XoXw1gijjrfJK2c8Ey8iJ83I0PK8",
+    "SUPABASE_SERVICE_ROLE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBlZmZlcnlhdWtxdmxkeGR4a2tiIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4Nzg0OTEzMCwiZXhwIjoyMTAzNDI1MTMwfQ.a4XXFmx4tunE6jtUPBeQW91wDRyGzVDvVXqvR27dYYk"
+  }
+}

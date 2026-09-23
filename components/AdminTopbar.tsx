@@ -1,0 +1,1 @@
+export function AdminTopbar({title,subtitle}:{title:string;subtitle?:string}){return <header className="admin-topbar"><div><h1>{title}</h1>{subtitle&&<p>{subtitle}</p>}</div><div className="admin-user"><span>Administrador</span><b>PA</b></div></header>}

@@ -1,0 +1,5 @@
+'use client';
+
+import Image from 'next/image';import Link from 'next/link';import { usePathname, useRouter } from 'next/navigation';import { createClient } from '@/lib/supabase/client';
+const links=[['/admin','▦','Inicio'],['/admin/vehiculos','▣','Vehículos'],['/admin/repuestos','⚙','Repuestos'],['/admin/configuracion','⌁','Configuración']];
+export function AdminSidebar(){const path=usePathname();const router=useRouter();async function logout(){const client=createClient();if(client)await client.auth.signOut();router.push('/admin/login')};return <aside className="admin-sidebar"><Link href="/" className="admin-logo"><Image src="/logo-dorado.png" alt="Pantoja" width={180} height={135}/><span>ADMINISTRACIÓN</span></Link><nav>{links.map(([href,icon,label])=><Link className={path===href?'active':''} href={href} key={href}><span>{icon}</span>{label}</Link>)}</nav><div className="admin-side-bottom"><Link href="/" target="_blank">↗ Ver sitio público</Link><button onClick={logout}>⇥ Cerrar sesión</button></div></aside>}

@@ -1,0 +1,1 @@
+import { AdminTopbar } from '@/components/AdminTopbar';import { PartForm } from '@/components/PartForm';export default function Page(){return <><AdminTopbar title="Agregar repuesto" subtitle="Completa la información del nuevo repuesto"/><div className="admin-content form-content"><PartForm/></div></>}
