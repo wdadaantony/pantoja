@@ -135,7 +135,7 @@ export const fichaVehicularSecciones = [
   }
 ] as const;
 
-export const fichaVehicularCampos = fichaVehicularSecciones.flatMap(seccion => seccion.campos);
+export const fichaVehicularCampos: readonly (readonly [string, string, string])[] = fichaVehicularSecciones.flatMap(seccion => seccion.campos);
 
 export const accesoriosPorModelo = [
   'Faros delanteros',
