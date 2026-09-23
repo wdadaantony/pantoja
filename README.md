@@ -1,4 +1,4 @@
-# Sitio web y panel PANTOJA
+# Sitio web y panel PANTOJA. hola
 
 Este proyecto contiene el sitio público de PANTOJA y un panel de administración para gestionar vehículos, repuestos, fotos y datos de contacto. El botón de compra abre WhatsApp: no existe carrito ni cobro en línea.
 
@@ -113,6 +113,8 @@ Todos los botones del sitio usan el número guardado aquí.
 ## Archivos importantes
 
 - `supabase/schema.sql`: tablas, políticas y datos iniciales.
+
+- trigger deploy
 - `.env.example`: lista de variables requeridas.
 - `lib/whatsapp.ts`: formato único de enlaces y mensajes de WhatsApp.
 - `public/logo-dorado.png`: logotipo oficial entregado.
