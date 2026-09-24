@@ -25,7 +25,7 @@ export default async function Home(){
     <PublicHeader/>
 
     <section className="hero hero-v2" id="inicio">
-      <div className="hero-media"><Image src="/pantoja-fleet.png" alt="Gama de vans y minivans Pantoja en carretera" fill priority sizes="100vw"/><div className="hero-noise"/></div>
+      <div className="hero-media"><Image src="/pantoja-hero.jpeg" alt="Gama de vans y minivans Pantoja en carretera" fill priority sizes="100vw"/><div className="hero-noise"/></div>
       <div className="container hero-content"><div className="hero-copy">
         <div className="hero-kicker"><span>MODELOS 2026</span><small>MARCA EXCLUSIVA PERUANA</small></div>
         <h1>La ruta es tuya.<br/><em>Conquístala.</em></h1>
