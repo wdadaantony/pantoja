@@ -8,6 +8,7 @@ import { VehicleCard } from '@/components/VehicleCard';
 import { accesoriosPorModelo, autopartesPorModelo, fichaVehicularSecciones, ordenarVehiculosPorModelo, precioLocal, repuestos as fallbackRepuestos, normalizarVehiculo, vehiculos as fallbackVehiculos, configuracion as fallbackConfig } from '@/lib/data';
 import { mensajesWhatsapp, waLink } from '@/lib/whatsapp';
 import { PartCard } from '@/components/PartCard';
+import { VehicleGallery } from '@/components/VehicleGallery';
 import { supabasePublic } from '@/lib/supabase/public';
 
 export const revalidate = 30;
@@ -125,26 +126,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           <div className="product-gallery">
             <span className="catalog-badge">{v.modelo}</span>
             {hasImages ? (
-              <div className="gallery-wrap">
-                <img 
-                  className="main-detail-image" 
-                  src={v.imagenes[0]} 
-                  alt={v.nombre} 
-                  style={{ width: '100%', height: 'auto', maxHeight: '450px', borderRadius: '8px', objectFit: 'contain' }} 
-                />
-                {v.imagenes.length > 1 && (
-                  <div className="gallery-thumbs" style={{ display: 'flex', gap: '8px', marginTop: '12px', overflowX: 'auto' }}>
-                    {v.imagenes.map((imgUrl, i) => (
-                      <img 
-                        key={i} 
-                        src={imgUrl} 
-                        alt={`${v.nombre} ${i + 1}`} 
-                        style={{ width: '60px', height: '60px', borderRadius: '4px', objectFit: 'cover', cursor: 'pointer' }} 
-                      />
-                    ))}
-                  </div>
-                )}
-              </div>
+              <VehicleGallery images={v.imagenes} name={v.nombre} />
             ) : (
               <>
                 <Image className="detail-vehicle-image" src="/pantoja-fleet.png" alt={`${v.nombre}, imagen referencial`} fill sizes="(max-width: 700px) 100vw, 55vw"/>
