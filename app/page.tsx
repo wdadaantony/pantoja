@@ -3,9 +3,10 @@ import Link from 'next/link';
 import { ArrowRight, BadgeCheck, CarFront, Headphones, MapPin, MessageCircle, PackageCheck, ShieldCheck, Sparkles, Users, Wrench } from 'lucide-react';
 import { supabasePublic } from '@/lib/supabase/public';
 import { PromoModal } from '@/components/PromoModal';
-import { imagenesPorModelo, ordenarVehiculosPorModelo } from '@/lib/data';
+import { imagenesPorModelo, ordenarVehiculosPorModelo, repuestos as fallbackRepuestos } from '@/lib/data';
 import { PublicHeader } from '@/components/PublicHeader';
 import { PublicFooter } from '@/components/PublicFooter';
+import { PartCard } from '@/components/PartCard';
 
 export const revalidate=30;
 
@@ -19,6 +20,12 @@ const modelos=ordenarVehiculosPorModelo([
 export default async function Home(){
   let promoConfig={active:false,image:'',url:''};
   if(supabasePublic){const {data}=await supabasePublic.from('configuracion').select('promo_popup_activa, promo_popup_imagen, promo_popup_url').eq('id',1).maybeSingle();if(data)promoConfig={active:data.promo_popup_activa??false,image:data.promo_popup_imagen??'',url:data.promo_popup_url??''}}
+
+  let repuestosDestacados = fallbackRepuestos.filter(r => r.destacado).slice(0, 4);
+  if (supabasePublic) {
+    const { data } = await supabasePublic.from('repuestos').select('*').eq('publicado', true).eq('destacado', true).limit(4);
+    if (data && data.length > 0) repuestosDestacados = data as typeof fallbackRepuestos;
+  }
   const wa='https://wa.me/51952885588?text=Hola%20PANTOJA%20%F0%9F%91%8B%2C%20quisiera%20informaci%C3%B3n%20sobre%20sus%20veh%C3%ADculos.';
   return <main>
     <PromoModal active={promoConfig.active} image={promoConfig.image} url={promoConfig.url}/>
@@ -50,6 +57,18 @@ export default async function Home(){
         <div className="model-number">0{index+1}</div><div className="model-content-v2"><span>{modelo.tipo}</span><h3>{modelo.nombre}</h3><p>{modelo.pasajeros}</p><div className="model-actions"><Link href={`/vehiculos/${modelo.slug}`}>Conocer modelo <ArrowRight size={13}/></Link><a href={`https://wa.me/51952885588?text=${encodeURIComponent(`Hola PANTOJA 👋, estoy interesado en la ${modelo.nombre}. ¿Me pueden dar más información?`)}`} target="_blank" rel="noreferrer">Cotizar</a></div></div>
       </article>)}</div>
     </div></section>
+
+    {repuestosDestacados.length > 0 && (
+      <section className="model-parts container" id="repuestos-destacados">
+        <div className="section-heading" data-reveal>
+          <div><p className="eyebrow dark"><span/> Mantén tu Pantoja al 100%</p><h2>Repuestos <em>destacados</em></h2></div>
+          <Link href="/repuestos">Ver todos →</Link>
+        </div>
+        <div className="catalog-grid">
+          {repuestosDestacados.map(p => <PartCard key={p.id} part={p}/>)}
+        </div>
+      </section>
+    )}
 
     <section className="trust trust-v2"><div className="container trust-grid">
       <div><span><ShieldCheck/></span><h3>Garantía de fábrica</h3><p>Tu inversión siempre respaldada.</p></div>
