@@ -235,260 +235,202 @@ export function VehicleForm({ vehicle }: { vehicle?: Vehiculo }) {
   }
 
   return (
-    <form className="product-form" onSubmit={handleSubmit(save)}>
+    <form className="product-form single-block" onSubmit={handleSubmit(save)}>
       <section>
-        <details open>
-          <summary>
-            <span>1</span>
-            <div>
-              <b>Información básica</b>
-              <small>Nombre, modelo y descripción del vehículo</small>
-            </div>
-          </summary>
+        <div className="form-section-title"><b>Fotos</b><small>La primera imagen será la portada</small></div>
+        <div className="details-body">
+          <label className="dropzone">
+            <input type="file" accept="image/jpeg,image/png,image/webp" multiple onChange={addPhotos} />
+            <b>Arrastra fotos aquí o toca para elegir</b>
+            <span>JPG, PNG o WebP · Máximo 5 MB por archivo</span>
+          </label>
+          <div className="photo-previews">
+            {photos.map((photo, i) => (
+              <figure key={photo.url}>
+                <img src={photo.url} alt={`Vista previa ${i + 1}`} />
+                {i === 0 && <b>Portada</b>}
+                <button type="button" onClick={() => removePhoto(i)}>×</button>
+              </figure>
+            ))}
+          </div>
+        </div>
+
+        <div className="form-section-title"><b>Información básica</b><small>Nombre, modelo y descripción del vehículo</small></div>
+        <div className="form-grid">
+          <label>
+            Nombre del vehículo
+            <input {...register('nombre')} placeholder="Ej. Pantoja Zeus" />
+            {errors.nombre && <em>{errors.nombre.message}</em>}
+          </label>
+          <label>
+            Slug
+            <input {...register('slug')} placeholder="pantoja-zeus" />
+            {errors.slug && <em>{errors.slug.message}</em>}
+          </label>
+          <label>
+            Modelo
+            <select {...register('modelo')}>
+              <option value="">Seleccionar</option>
+              {modelosVehiculo.map(x => (
+                <option key={x} value={x}>{x}</option>
+              ))}
+            </select>
+            {errors.modelo && <em>{errors.modelo.message}</em>}
+          </label>
+          <label>
+            Categoría
+            <select {...register('categoria')}>
+              <option value="">Seleccionar</option>
+              {categoriasVehiculo.map(x => (
+                <option key={x} value={x}>{x}</option>
+              ))}
+            </select>
+            {errors.categoria && <em>{errors.categoria.message}</em>}
+          </label>
+          <label>
+            Año
+            <input type="number" {...register('anio')} />
+            {errors.anio && <em>{errors.anio.message}</em>}
+          </label>
+          <label>
+            Carrocería
+            <select {...register('carroceria')}>
+              <option value="">Seleccionar</option>
+              {carroceriasVehiculo.map(x => (
+                <option key={x} value={x}>{x}</option>
+              ))}
+            </select>
+            {errors.carroceria && <em>{errors.carroceria.message}</em>}
+          </label>
+          <label>
+            Color
+            <input {...register('color')} placeholder="Ej. Blanco, dorado o a elección" />
+          </label>
+          <label className="full">
+            Descripción
+            <textarea rows={5} {...register('descripcion')} placeholder="Describe las principales ventajas..." />
+            {errors.descripcion && <em>{errors.descripcion.message}</em>}
+          </label>
+        </div>
+
+        <div className="form-section-title"><b>Precio</b><small>Monto y moneda para mostrar</small></div>
+        <div className="form-grid price-grid">
+          <label>
+            Monto
+            <input type="number" step="any" {...register('precio')} placeholder="Dejar vacío para consultar" />
+          </label>
+          <label>
+            Moneda
+            <select {...register('moneda')}>
+              <option value="USD">Dólares (USD)</option>
+              <option value="PEN">Soles (PEN)</option>
+            </select>
+          </label>
+          <label className="check full">
+            <input
+              type="checkbox"
+              checked={!watch('precio')}
+              onChange={(e) => {
+                if (e.target.checked) {
+                  setValue('precio', '', { shouldDirty: true });
+                }
+              }}
+            />
+            Mostrar “Consultar precio” en vez del monto
+          </label>
+        </div>
+
+        <div className="form-section-title"><b>Ficha técnica completa</b><small>Todos los campos de la ficha técnica del vehículo</small></div>
+
+        <div className="technical-sheet-subgroup">
+          <h4>Resumen comercial</h4>
           <div className="form-grid">
             <label>
-              Nombre del vehículo
-              <input {...register('nombre')} placeholder="Ej. Pantoja Zeus" />
-              {errors.nombre && <em>{errors.nombre.message}</em>}
+              Pasajeros
+              <input type="number" {...register('pasajeros')} />
             </label>
             <label>
-              Slug
-              <input {...register('slug')} placeholder="pantoja-zeus" />
-              {errors.slug && <em>{errors.slug.message}</em>}
+              Motor
+              <input {...register('motor')} placeholder="Ej. Turbo diésel" />
             </label>
             <label>
-              Modelo
-              <select {...register('modelo')}>
-                <option value="">Seleccionar</option>
-                {modelosVehiculo.map(x => (
-                  <option key={x} value={x}>{x}</option>
-                ))}
+              Cilindrada
+              <input {...register('cilindrada')} placeholder="Ej. 2.8 L" />
+            </label>
+            <label>
+              Potencia
+              <input {...register('potencia')} placeholder="Ej. 150 HP" />
+            </label>
+            <label>
+              Transmisión
+              <select {...register('transmision')}>
+                <option value="Manual">Manual</option>
+                <option value="Automática">Automática</option>
               </select>
-              {errors.modelo && <em>{errors.modelo.message}</em>}
             </label>
             <label>
-              Categoría
-              <select {...register('categoria')}>
-                <option value="">Seleccionar</option>
-                {categoriasVehiculo.map(x => (
-                  <option key={x} value={x}>{x}</option>
-                ))}
+              Caja
+              <input {...register('caja')} placeholder="Ej. Mecánica de 5 velocidades" />
+            </label>
+            <label>
+              Carga
+              <input {...register('carga')} placeholder="Ej. Consultar / 1 tonelada" />
+            </label>
+            <label>
+              Norma Euro
+              <input {...register('euro')} placeholder="Ej. Euro IV" />
+            </label>
+            <label>
+              Combustible
+              <select {...register('combustible')}>
+                <option value="Gasolina">Gasolina</option>
+                <option value="Diésel">Diésel</option>
+                <option value="GNV">GNV</option>
+                <option value="GLP">GLP</option>
               </select>
-              {errors.categoria && <em>{errors.categoria.message}</em>}
-            </label>
-            <label>
-              Año
-              <input type="number" {...register('anio')} />
-              {errors.anio && <em>{errors.anio.message}</em>}
-            </label>
-            <label>
-              Carrocería
-              <select {...register('carroceria')}>
-                <option value="">Seleccionar</option>
-                {carroceriasVehiculo.map(x => (
-                  <option key={x} value={x}>{x}</option>
-                ))}
-              </select>
-              {errors.carroceria && <em>{errors.carroceria.message}</em>}
-            </label>
-            <label>
-              Color
-              <input {...register('color')} placeholder="Ej. Blanco, dorado o a elección" />
-            </label>
-            <label className="full">
-              Descripción
-              <textarea rows={5} {...register('descripcion')} placeholder="Describe las principales ventajas..." />
-              {errors.descripcion && <em>{errors.descripcion.message}</em>}
             </label>
           </div>
-        </details>
-      </section>
+        </div>
 
-      <section>
-        <details open>
-          <summary>
-            <span>2</span>
-            <div>
-              <b>Precio</b>
-              <small>Monto y moneda para mostrar</small>
-            </div>
-          </summary>
-          <div className="form-grid price-grid">
-            <label>
-              Monto
-              <input type="number" step="any" {...register('precio')} placeholder="Dejar vacío para consultar" />
-            </label>
-            <label>
-              Moneda
-              <select {...register('moneda')}>
-                <option value="USD">Dólares (USD)</option>
-                <option value="PEN">Soles (PEN)</option>
-              </select>
-            </label>
-            <label className="check full">
-              <input 
-                type="checkbox" 
-                checked={!watch('precio')} 
-                onChange={(e) => {
-                  if (e.target.checked) {
-                    setValue('precio', '', { shouldDirty: true });
-                  }
-                }} 
-              /> 
-              Mostrar “Consultar precio” en vez del monto
-            </label>
-          </div>
-        </details>
-      </section>
-
-      <section>
-        <details open>
-          <summary>
-            <span>3</span>
-            <div>
-              <b>Ficha técnica completa</b>
-              <small>Todos los campos de la ficha técnica del vehículo</small>
-            </div>
-          </summary>
-
-          <div className="technical-sheet-subgroup">
-            <h4>Resumen comercial</h4>
-            <div className="form-grid">
-              <label>
-                Pasajeros
-                <input type="number" {...register('pasajeros')} />
-              </label>
-              <label>
-                Motor
-                <input {...register('motor')} placeholder="Ej. Turbo diésel" />
-              </label>
-              <label>
-                Cilindrada
-                <input {...register('cilindrada')} placeholder="Ej. 2.8 L" />
-              </label>
-              <label>
-                Potencia
-                <input {...register('potencia')} placeholder="Ej. 150 HP" />
-              </label>
-              <label>
-                Transmisión
-                <select {...register('transmision')}>
-                  <option value="Manual">Manual</option>
-                  <option value="Automática">Automática</option>
-                </select>
-              </label>
-              <label>
-                Caja
-                <input {...register('caja')} placeholder="Ej. Mecánica de 5 velocidades" />
-              </label>
-              <label>
-                Carga
-                <input {...register('carga')} placeholder="Ej. Consultar / 1 tonelada" />
-              </label>
-              <label>
-                Norma Euro
-                <input {...register('euro')} placeholder="Ej. Euro IV" />
-              </label>
-              <label>
-                Combustible
-                <select {...register('combustible')}>
-                  <option value="Gasolina">Gasolina</option>
-                  <option value="Diésel">Diésel</option>
-                  <option value="GNV">GNV</option>
-                  <option value="GLP">GLP</option>
-                </select>
-              </label>
-            </div>
-          </div>
-
-          {fichaVehicularSecciones.map(seccion => (
-            <div className="technical-sheet-subgroup" key={seccion.titulo}>
-              <h4>{seccion.titulo}</h4>
-              <small>{seccion.resumen}</small>
-              <div className="form-grid technical-sheet-grid">
-                {seccion.campos.map(([name, label, placeholder]) => (
-                  <label key={name}>{label}<input {...register(`ficha.${name}` as any)} placeholder={placeholder} /></label>
-                ))}
-              </div>
-            </div>
-          ))}
-        </details>
-      </section>
-
-      <section>
-        <details>
-          <summary>
-            <span>4</span>
-            <div>
-              <b>Equipamiento</b>
-              <small>Agrega cada característica con Enter</small>
-            </div>
-          </summary>
-          <div className="details-body">
-            <label>
-              Nuevo ítem (Presiona Enter para agregar)
-              <input value={tag} onChange={e => setTag(e.target.value)} onKeyDown={addTag} placeholder="Ej. Aire acondicionado" />
-            </label>
-            <div className="chips">
-              {equipment.map((x, i) => (
-                <button type="button" key={`${x}-${i}`} onClick={() => setEquipment(a => a.filter((_, j) => j !== i))}>
-                  {x} ×
-                </button>
+        {fichaVehicularSecciones.map(seccion => (
+          <div className="technical-sheet-subgroup" key={seccion.titulo}>
+            <h4>{seccion.titulo}</h4>
+            <small>{seccion.resumen}</small>
+            <div className="form-grid technical-sheet-grid">
+              {seccion.campos.map(([name, label, placeholder]) => (
+                <label key={name}>{label}<input {...register(`ficha.${name}` as any)} placeholder={placeholder} /></label>
               ))}
             </div>
           </div>
-        </details>
-      </section>
+        ))}
 
-      <section>
-        <details open>
-          <summary>
-            <span>5</span>
-            <div>
-              <b>Fotos</b>
-              <small>La primera imagen será la portada</small>
-            </div>
-          </summary>
-          <div className="details-body">
-            <label className="dropzone">
-              <input type="file" accept="image/jpeg,image/png,image/webp" multiple onChange={addPhotos} />
-              <b>Arrastra fotos aquí o toca para elegir</b>
-              <span>JPG, PNG o WebP · Máximo 5 MB por archivo</span>
-            </label>
-            <div className="photo-previews">
-              {photos.map((photo, i) => (
-                <figure key={photo.url}>
-                  <img src={photo.url} alt={`Vista previa ${i + 1}`} />
-                  {i === 0 && <b>Portada</b>}
-                  <button type="button" onClick={() => removePhoto(i)}>×</button>
-                </figure>
-              ))}
-            </div>
+        <div className="form-section-title"><b>Equipamiento</b><small>Agrega cada característica con Enter</small></div>
+        <div className="details-body">
+          <label>
+            Nuevo ítem (Presiona Enter para agregar)
+            <input value={tag} onChange={e => setTag(e.target.value)} onKeyDown={addTag} placeholder="Ej. Aire acondicionado" />
+          </label>
+          <div className="chips">
+            {equipment.map((x, i) => (
+              <button type="button" key={`${x}-${i}`} onClick={() => setEquipment(a => a.filter((_, j) => j !== i))}>
+                {x} ×
+              </button>
+            ))}
           </div>
-        </details>
-      </section>
+        </div>
 
-      <section>
-        <details>
-          <summary>
-            <span>6</span>
-            <div>
-              <b>Disponibilidad y publicación</b>
-              <small>Sedes y visibilidad en el sitio</small>
-            </div>
-          </summary>
-          <div className="details-body checks">
-            <label>
-              <input type="checkbox" checked={aqp} onChange={e => setAqp(e.target.checked)} /> Arequipa
-            </label>
-            <label>
-              <input type="checkbox" checked={publicado} onChange={e => setPublicado(e.target.checked)} /> Publicado
-            </label>
-            <label>
-              <input type="checkbox" checked={destacado} onChange={e => setDestacado(e.target.checked)} /> Destacado en portada
-            </label>
-          </div>
-        </details>
+        <div className="form-section-title"><b>Disponibilidad y publicación</b><small>Sedes y visibilidad en el sitio</small></div>
+        <div className="details-body checks">
+          <label>
+            <input type="checkbox" checked={aqp} onChange={e => setAqp(e.target.checked)} /> Arequipa
+          </label>
+          <label>
+            <input type="checkbox" checked={publicado} onChange={e => setPublicado(e.target.checked)} /> Publicado
+          </label>
+          <label>
+            <input type="checkbox" checked={destacado} onChange={e => setDestacado(e.target.checked)} /> Destacado en portada
+          </label>
+        </div>
       </section>
 
       {errorMsg && <p className="form-error" role="alert" style={{ color: 'red', marginTop: '15px' }}>{errorMsg}</p>}
