@@ -342,87 +342,83 @@ export function VehicleForm({ vehicle }: { vehicle?: Vehiculo }) {
       </section>
 
       <section>
-        <details>
+        <details open>
           <summary>
             <span>3</span>
             <div>
-              <b>Especificaciones técnicas</b>
-              <small>Motor, capacidad y rendimiento</small>
+              <b>Ficha técnica completa</b>
+              <small>Todos los campos de la ficha técnica del vehículo</small>
             </div>
           </summary>
-          <div className="form-grid">
-            <label>
-              Pasajeros
-              <input type="number" {...register('pasajeros')} />
-            </label>
-            <label>
-              Motor
-              <input {...register('motor')} placeholder="Ej. Turbo diésel" />
-            </label>
-            <label>
-              Cilindrada
-              <input {...register('cilindrada')} placeholder="Ej. 2.8 L" />
-            </label>
-            <label>
-              Potencia
-              <input {...register('potencia')} placeholder="Ej. 150 HP" />
-            </label>
-            <label>
-              Transmisión
-              <select {...register('transmision')}>
-                <option value="Manual">Manual</option>
-                <option value="Automática">Automática</option>
-              </select>
-            </label>
-            <label>
-              Caja
-              <input {...register('caja')} placeholder="Ej. Mecánica de 5 velocidades" />
-            </label>
-            <label>
-              Carga
-              <input {...register('carga')} placeholder="Ej. Consultar / 1 tonelada" />
-            </label>
-            <label>
-              Norma Euro
-              <input {...register('euro')} placeholder="Ej. Euro IV" />
-            </label>
-            <label>
-              Combustible
-              <select {...register('combustible')}>
-                <option value="Gasolina">Gasolina</option>
-                <option value="Diésel">Diésel</option>
-                <option value="GNV">GNV</option>
-                <option value="GLP">GLP</option>
-              </select>
-            </label>
+
+          <div className="technical-sheet-subgroup">
+            <h4>Resumen comercial</h4>
+            <div className="form-grid">
+              <label>
+                Pasajeros
+                <input type="number" {...register('pasajeros')} />
+              </label>
+              <label>
+                Motor
+                <input {...register('motor')} placeholder="Ej. Turbo diésel" />
+              </label>
+              <label>
+                Cilindrada
+                <input {...register('cilindrada')} placeholder="Ej. 2.8 L" />
+              </label>
+              <label>
+                Potencia
+                <input {...register('potencia')} placeholder="Ej. 150 HP" />
+              </label>
+              <label>
+                Transmisión
+                <select {...register('transmision')}>
+                  <option value="Manual">Manual</option>
+                  <option value="Automática">Automática</option>
+                </select>
+              </label>
+              <label>
+                Caja
+                <input {...register('caja')} placeholder="Ej. Mecánica de 5 velocidades" />
+              </label>
+              <label>
+                Carga
+                <input {...register('carga')} placeholder="Ej. Consultar / 1 tonelada" />
+              </label>
+              <label>
+                Norma Euro
+                <input {...register('euro')} placeholder="Ej. Euro IV" />
+              </label>
+              <label>
+                Combustible
+                <select {...register('combustible')}>
+                  <option value="Gasolina">Gasolina</option>
+                  <option value="Diésel">Diésel</option>
+                  <option value="GNV">GNV</option>
+                  <option value="GLP">GLP</option>
+                </select>
+              </label>
+            </div>
           </div>
+
+          {fichaVehicularSecciones.map(seccion => (
+            <div className="technical-sheet-subgroup" key={seccion.titulo}>
+              <h4>{seccion.titulo}</h4>
+              <small>{seccion.resumen}</small>
+              <div className="form-grid technical-sheet-grid">
+                {seccion.campos.map(([name, label, placeholder]) => (
+                  <label key={name}>{label}<input {...register(`ficha.${name}` as any)} placeholder={placeholder} /></label>
+                ))}
+              </div>
+            </div>
+          ))}
         </details>
       </section>
-
-
-      {fichaVehicularSecciones.map((seccion, index) => (
-        <section key={seccion.titulo}>
-          <details open>
-            <summary>
-              <span>{index + 4}</span>
-              <div>
-                <b>{seccion.titulo}</b>
-                <small>{seccion.resumen}</small>
-              </div>
-            </summary>
-            <div className="form-grid technical-sheet-grid">
-              {seccion.campos.map(([name, label, placeholder]) => (
-                <label key={name}>{label}<input {...register(`ficha.${name}` as any)} placeholder={placeholder} /></label>
-              ))}
-            </div>
-          </details>
-        </section>
-      ))}
 
       <section>
         <details>
           <summary>
-            <span>9</span>
+            <span>4</span>
             <div>
               <b>Equipamiento</b>
               <small>Agrega cada característica con Enter</small>
@@ -447,7 +443,7 @@ export function VehicleForm({ vehicle }: { vehicle?: Vehiculo }) {
       <section>
         <details open>
           <summary>
-            <span>10</span>
+            <span>5</span>
             <div>
               <b>Fotos</b>
               <small>La primera imagen será la portada</small>
@@ -475,7 +471,7 @@ export function VehicleForm({ vehicle }: { vehicle?: Vehiculo }) {
       <section>
         <details>
           <summary>
-            <span>11</span>
+            <span>6</span>
             <div>
               <b>Disponibilidad y publicación</b>
               <small>Sedes y visibilidad en el sitio</small>
