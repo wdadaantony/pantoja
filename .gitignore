@@ -10,6 +10,7 @@
 
 # testing
 /coverage
+*.tsbuildinfo
 
 # next.js
 /.next/
@@ -31,6 +32,7 @@ yarn-error.log*
 !.env.example
 
 # deployment and generated files
+/supabase/.temp/
 .vercel
 next-env.d.ts
 /dist/
@@ -42,4 +44,3 @@ next-env.d.ts
 
 
 .vercel
-*.tsbuildinfo
