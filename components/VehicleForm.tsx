@@ -6,12 +6,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useRouter } from 'next/navigation';
 import type { Vehiculo } from '@/lib/data';
-import { carroceriasVehiculo, categoriasVehiculo, fichaVehicularCampos, fichaVehicularSecciones, modelosVehiculo } from '@/lib/data';
+import { fichaVehicularCampos, fichaVehicularSecciones } from '@/lib/data';
+import { fichaCamposBase, valorTecnico } from '@/lib/technical-sheet';
 import { createClient } from '@/lib/supabase/client';
 
 function fichaDefault(vehicle: Vehiculo | undefined) {
   const ficha = (vehicle as any)?.ficha_tecnica as Record<string, string> | undefined;
-  return Object.fromEntries(fichaVehicularCampos.map(([name]) => [name, ficha?.[name] ?? '']));
+  return { ...ficha, ...Object.fromEntries(fichaVehicularCampos.map(([name]) => [name, valorTecnico(vehicle, name)])) };
 }
 
 
@@ -77,7 +78,8 @@ export function VehicleForm({ vehicle }: { vehicle?: Vehiculo }) {
       potencia: vehicle?.potencia ?? '',
       transmision: vehicle?.transmision ?? 'Manual',
       combustible: vehicle?.combustible ?? 'Gasolina',
-      ficha: fichaDefault(vehicle)
+      ficha: fichaDefault(vehicle),
+      ...(vehicle ? Object.fromEntries(Object.entries(fichaCamposBase).map(([key, field]) => [field, valorTecnico(vehicle, key)])) : {})
     }
   });
 
@@ -174,7 +176,7 @@ export function VehicleForm({ vehicle }: { vehicle?: Vehiculo }) {
 
       // 3. Preparar payload
       const ficha_tecnica = Object.fromEntries(
-        Object.entries(values.ficha ?? {}).filter(([, value]) => String(value ?? '').trim().length > 0)
+        Object.entries({ ...values.ficha, ...Object.fromEntries(Object.entries(fichaCamposBase).map(([key, field]) => [key, values[field]])) }).filter(([, value]) => String(value ?? '').trim().length > 0)
       );
 
       const payload = {
@@ -267,45 +269,6 @@ export function VehicleForm({ vehicle }: { vehicle?: Vehiculo }) {
             <input {...register('slug')} placeholder="pantoja-zeus" />
             {errors.slug && <em>{errors.slug.message}</em>}
           </label>
-          <label>
-            Modelo
-            <select {...register('modelo')}>
-              <option value="">Seleccionar</option>
-              {modelosVehiculo.map(x => (
-                <option key={x} value={x}>{x}</option>
-              ))}
-            </select>
-            {errors.modelo && <em>{errors.modelo.message}</em>}
-          </label>
-          <label>
-            Categoría
-            <select {...register('categoria')}>
-              <option value="">Seleccionar</option>
-              {categoriasVehiculo.map(x => (
-                <option key={x} value={x}>{x}</option>
-              ))}
-            </select>
-            {errors.categoria && <em>{errors.categoria.message}</em>}
-          </label>
-          <label>
-            Año
-            <input type="number" {...register('anio')} />
-            {errors.anio && <em>{errors.anio.message}</em>}
-          </label>
-          <label>
-            Carrocería
-            <select {...register('carroceria')}>
-              <option value="">Seleccionar</option>
-              {carroceriasVehiculo.map(x => (
-                <option key={x} value={x}>{x}</option>
-              ))}
-            </select>
-            {errors.carroceria && <em>{errors.carroceria.message}</em>}
-          </label>
-          <label>
-            Color
-            <input {...register('color')} placeholder="Ej. Blanco, dorado o a elección" />
-          </label>
           <label className="full">
             Descripción
             <textarea rows={5} {...register('descripcion')} placeholder="Describe las principales ventajas..." />
@@ -340,69 +303,20 @@ export function VehicleForm({ vehicle }: { vehicle?: Vehiculo }) {
           </label>
         </div>
 
-        <div className="form-section-title"><b>Ficha técnica completa</b><small>Todos los campos de la ficha técnica del vehículo</small></div>
-
-        <div className="technical-sheet-subgroup">
-          <h4>Resumen comercial</h4>
-          <div className="form-grid">
-            <label>
-              Pasajeros
-              <input type="number" {...register('pasajeros')} />
-            </label>
-            <label>
-              Motor
-              <input {...register('motor')} placeholder="Ej. Turbo diésel" />
-            </label>
-            <label>
-              Cilindrada
-              <input {...register('cilindrada')} placeholder="Ej. 2.8 L" />
-            </label>
-            <label>
-              Potencia
-              <input {...register('potencia')} placeholder="Ej. 150 HP" />
-            </label>
-            <label>
-              Transmisión
-              <select {...register('transmision')}>
-                <option value="Manual">Manual</option>
-                <option value="Automática">Automática</option>
-              </select>
-            </label>
-            <label>
-              Caja
-              <input {...register('caja')} placeholder="Ej. Mecánica de 5 velocidades" />
-            </label>
-            <label>
-              Carga
-              <input {...register('carga')} placeholder="Ej. Consultar / 1 tonelada" />
-            </label>
-            <label>
-              Norma Euro
-              <input {...register('euro')} placeholder="Ej. Euro IV" />
-            </label>
-            <label>
-              Combustible
-              <select {...register('combustible')}>
-                <option value="Gasolina">Gasolina</option>
-                <option value="Diésel">Diésel</option>
-                <option value="GNV">GNV</option>
-                <option value="GLP">GLP</option>
-              </select>
-            </label>
-          </div>
-        </div>
-
-        {fichaVehicularSecciones.map(seccion => (
-          <div className="technical-sheet-subgroup" key={seccion.titulo}>
-            <h4>{seccion.titulo}</h4>
-            <small>{seccion.resumen}</small>
-            <div className="form-grid technical-sheet-grid">
-              {seccion.campos.map(([name, label, placeholder]) => (
-                <label key={name}>{label}<input {...register(`ficha.${name}` as any)} placeholder={placeholder} /></label>
-              ))}
+        <div className="form-section-title"><b>Ficha técnica</b><small>Una sola ficha con todas las categorías del vehículo. Completa únicamente los datos confirmados.</small></div>
+        <div className="technical-sheet-editor">
+          {fichaVehicularSecciones.map(seccion => (
+            <div className="technical-sheet-category" key={seccion.titulo}>
+              <h3>{seccion.titulo}</h3>
+              <div className="form-grid">
+                {seccion.campos.map(([name, label, placeholder]) => {
+                  const field = fichaCamposBase[name as keyof typeof fichaCamposBase];
+                  return <label key={name}>{label}<input {...register((field ?? `ficha.${name}`) as any)} placeholder={placeholder} />{field && errors[field] && <em>{errors[field]?.message}</em>}</label>;
+                })}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
 
         <div className="form-section-title"><b>Equipamiento</b><small>Agrega cada característica con Enter</small></div>
         <div className="details-body">

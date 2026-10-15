@@ -10,30 +10,9 @@ import { mensajesWhatsapp, waLink } from '@/lib/whatsapp';
 import { PartCard } from '@/components/PartCard';
 import { VehicleGallery } from '@/components/VehicleGallery';
 import { supabasePublic } from '@/lib/supabase/public';
+import { valorTecnico } from '@/lib/technical-sheet';
 
 export const revalidate = 30;
-function valorFichaVehicular(v: any, key: string) {
-  const ficha = v.ficha_tecnica ?? {};
-  const base: Record<string, string | number | undefined> = {
-    marca: 'PANTOJA',
-    modelo_comercial: v.modelo,
-    categoria_vehicular: v.categoria,
-    clase_vehicular: v.carroceria,
-    color_1: v.color,
-    anio_modelo: v.anio,
-    cilindrada: v.cilindrada,
-    potencia: v.potencia,
-    transmision: v.transmision,
-    caja: v.caja,
-    combustible: v.combustible,
-    pasajeros: v.pasajeros,
-    carga: v.carga,
-    norma_gases: v.euro
-  };
-  const value = ficha[key] ?? base[key];
-  return value === undefined || value === null || String(value).trim() === '' ? 'Consultar' : String(value);
-}
-
 export async function generateStaticParams() {
   const supabase = supabasePublic;
   if (supabase) {
@@ -159,19 +138,19 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           <div className="container">
             <div className="vehicle-id-heading">
               <p className="eyebrow"><span /> Ficha técnica</p>
-              <h2>Identificación vehicular completa</h2>
-              <p>Datos organizados para revisar categoría, registros, motor, capacidad, dimensiones y equipamiento del modelo.</p>
+              <h2>Ficha técnica del vehículo</h2>
+              <p>Todas las características del modelo en una sola ficha.</p>
             </div>
-            <div className="vehicle-id-grid">
+            <div className="unified-technical-sheet">
               {fichaVehicularSecciones.map(seccion => (
-                <article className="vehicle-id-group" key={seccion.titulo}>
+                <article className="technical-sheet-category" key={seccion.titulo}>
                   <h3>{seccion.titulo}</h3>
-                  <small>{seccion.resumen}</small>
+                  
                   <dl>
                     {seccion.campos.map(([key, label]) => (
                       <div key={key}>
                         <dt>{label}</dt>
-                        <dd>{valorFichaVehicular(v, key)}</dd>
+                        <dd>{valorTecnico(v, key) || 'Consultar'}</dd>
                       </div>
                     ))}
                   </dl>

@@ -1,0 +1,88 @@
+.vehicle-id-section {
+  background: #fff;
+  color: #171717;
+}
+
+.vehicle-id-section .vehicle-id-heading h2,
+.vehicle-id-section .vehicle-id-heading > p {
+  color: #171717;
+}
+
+.unified-technical-sheet {
+  columns: 2;
+  column-gap: 28px;
+  border: 1px solid #d8d8d8;
+  padding: 20px;
+  background: #fff;
+}
+
+.technical-sheet-category {
+  break-inside: avoid;
+}
+
+.technical-sheet-category h3 {
+  margin: 0;
+  padding: 12px 10px 8px;
+  color: var(--red);
+  font: 700 17px/1.3 var(--font-oswald);
+  text-transform: uppercase;
+  border-bottom: 2px solid var(--red);
+}
+
+.unified-technical-sheet dl {
+  margin: 0 0 14px;
+}
+
+.unified-technical-sheet dl > div {
+  display: grid;
+  grid-template-columns: minmax(0, 42fr) minmax(0, 58fr);
+  border-bottom: 1px solid #ddd;
+}
+
+.unified-technical-sheet dt,
+.unified-technical-sheet dd {
+  padding: 10px;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.unified-technical-sheet dt {
+  font-weight: 700;
+  background: #fafafa;
+}
+
+.unified-technical-sheet dd {
+  border-left: 1px solid #ddd;
+}
+
+.technical-sheet-editor {
+  margin: 20px;
+  border: 1px solid #ddd;
+}
+
+.technical-sheet-editor .technical-sheet-category h3 {
+  padding: 12px 18px;
+  background: #fafafa;
+}
+
+.technical-sheet-editor .form-grid {
+  padding: 18px;
+}
+
+@media (max-width: 700px) {
+  .unified-technical-sheet {
+    columns: 1;
+    padding: 10px;
+  }
+
+  .technical-sheet-editor {
+    margin: 12px;
+  }
+
+  .technical-sheet-editor .form-grid {
+    grid-template-columns: 1fr;
+    padding: 12px;
+  }
+}
