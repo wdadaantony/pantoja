@@ -10,9 +10,8 @@ export function PartsCatalog({ items }: { items: Repuesto[] }) {
   const [model, setModel] = useState('Todos');
   const filtered = useMemo(() => {
     const q = query.toLocaleLowerCase('es');
-    return items.filter(p => (!q || p.nombre.toLocaleLowerCase('es').includes(q)) && (model === 'Todos' || p.compatible_con.includes(model)));
+    return items.filter(p => (!q || `${p.nombre} ${p.sku} ${p.categoria}`.toLocaleLowerCase('es').includes(q)) && (model === 'Todos' || p.compatible_con.includes(model)));
   }, [items, query, model]);
-  const models = model === 'Todos' ? modelosVehiculo : modelosVehiculo.filter(m => m === model);
 
   return (
     <div className="catalog-layout parts-by-model">
@@ -22,13 +21,12 @@ export function PartsCatalog({ items }: { items: Repuesto[] }) {
         <label>Modelo<select value={model} onChange={e => setModel(e.target.value)}>{['Todos', ...modelosVehiculo].map(x => <option key={x}>{x}</option>)}</select></label>
       </aside>
       <section className="catalog-results">
-        {models.map(m => {
-          const byModel = filtered.filter(p => p.compatible_con.includes(m));
-          return <div className="model-parts-list" key={m}>
-            <div className="results-bar"><span>Accesorios y repuestos para {m}</span></div>
-            {byModel.length ? <div className="catalog-grid">{byModel.map(p => <PartCard key={p.id} part={p} />)}</div> : <div className="empty-state"><b>Sin productos registrados</b><p>Agrega mínimo 30 líneas para este modelo desde el administrador.</p></div>}
-          </div>;
-        })}
+        <div className="results-bar" aria-live="polite"><span>{filtered.length} repuestos encontrados{model !== 'Todos' ? ` para ${model}` : ''}</span></div>
+        {filtered.length ? (
+          <div className="catalog-grid">{filtered.map(p => <PartCard key={p.id} part={p} />)}</div>
+        ) : (
+          <div className="empty-state"><b>No encontramos repuestos</b><p>Prueba con otro nombre o modelo. Nuestro equipo puede confirmar la compatibilidad de tu pieza.</p></div>
+        )}
       </section>
     </div>
   );
