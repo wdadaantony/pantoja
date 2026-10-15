@@ -15,7 +15,7 @@ export function PromoModal({ active, image, url }: PromoModalProps) {
     if (!active || !image) return;
 
     // Verificar si el usuario ya cerró la promoción en esta sesión
-    const isClosed = sessionStorage.getItem('promo-closed');
+    const isClosed = sessionStorage.getItem(`promo-closed:${image}`);
     if (!isClosed) {
       // Pequeño retardo para mostrar el pop-up suavemente después de cargar la página
       const timer = setTimeout(() => {
@@ -26,7 +26,7 @@ export function PromoModal({ active, image, url }: PromoModalProps) {
   }, [active, image]);
 
   function close() {
-    sessionStorage.setItem('promo-closed', 'true');
+    sessionStorage.setItem(`promo-closed:${image}`, 'true');
     setIsOpen(false);
   }
 

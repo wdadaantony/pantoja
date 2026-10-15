@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
+import { stockValido } from '@/lib/inventory';
 
 type Row = { 
   nombre: string; 
@@ -10,6 +11,7 @@ type Row = {
   categoria: string; 
   marca: string; 
   precio: string; 
+  stock_cantidad?: string;
   stock: string 
 };
 
@@ -50,6 +52,7 @@ export function CsvImporter() {
           return Object.fromEntries(headers.map((h, i) => [h, columns[i] ?? ''])) as Row;
         });
 
+        if (parsedRows.some(row => !stockValido(row.stock_cantidad ?? ''))) { setRows([]); setError('La cantidad de stock debe ser un número entero mayor o igual a 0.'); return; }
         setRows(parsedRows);
       } catch (err: any) {
         setError('Error al procesar el archivo CSV.');
@@ -79,6 +82,7 @@ export function CsvImporter() {
           .replace(/(^-|-$)/g, '');
 
         return {
+          ...(row.stock_cantidad === undefined ? {} : { stock_cantidad: row.stock_cantidad === '' ? null : Number(row.stock_cantidad) }),
           nombre: row.nombre,
           sku: row.sku,
           slug: baseSlug,
@@ -152,6 +156,7 @@ export function CsvImporter() {
                   <th>SKU</th>
                   <th>Categoría</th>
                   <th>Precio</th>
+                  <th>Cantidad en stock</th>
                   <th>Estado</th>
                 </tr>
               </thead>
@@ -163,6 +168,7 @@ export function CsvImporter() {
                     <td>{r.sku}</td>
                     <td>{r.categoria}</td>
                     <td>S/ {r.precio}</td>
+                    <td>{r.stock_cantidad ?? 'Sin modificar'}</td>
                     <td><span className="status-pill published">Válida</span></td>
                   </tr>
                 ))}

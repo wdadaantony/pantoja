@@ -1,4 +1,5 @@
 export type Vehiculo = {
+  stock_cantidad?: number | null;
   id: string; slug: string; nombre: string; modelo: string; categoria: string; anio: number | null;
   precio: number | null; moneda: 'USD' | 'PEN'; carroceria?: string; color?: string; caja?: string;
   carga?: string; euro?: string; pasajeros: number | null; motor: string; cilindrada: string;
@@ -8,6 +9,7 @@ export type Vehiculo = {
 };
 
 export type Repuesto = {
+  stock_cantidad?: number | null;
   id: string; slug: string; nombre: string; sku: string; categoria: string; marca: string;
   precio: number | null; moneda: 'USD' | 'PEN'; compatible_con: string[]; descripcion: string;
   imagenes: string[]; stock: 'Disponible' | 'Bajo pedido' | 'Agotado'; destacado: boolean; publicado: boolean;

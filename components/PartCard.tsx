@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { textoStock } from '@/lib/inventory';
 import { MessageCircle, Wrench } from 'lucide-react';
 import type { Repuesto } from '@/lib/data';
 import { precioLocal } from '@/lib/data';
@@ -29,6 +30,7 @@ export function PartCard({ part }: { part: Repuesto }) {
           <Link href={`/repuestos/${part.slug}`}>{part.nombre}</Link>
         </h2>
         <span className={`stock ${part.stock === 'Disponible' ? 'in' : 'order'}`}>{part.stock}</span>
+        <p className="inventory-quantity">{textoStock(part.stock_cantidad)}</p>
         <strong>{precioLocal(part.precio, part.moneda)}</strong>
         <a className="card-wa" href={waLink(mensajesWhatsapp.repuesto(part.nombre, part.sku))} target="_blank" rel="noreferrer">
           <MessageCircle size={15}/> Cotizar por WhatsApp

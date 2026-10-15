@@ -8,12 +8,14 @@ import { useRouter } from 'next/navigation';
 import type { Repuesto } from '@/lib/data';
 import { modelosVehiculo } from '@/lib/data';
 import { createClient } from '@/lib/supabase/client';
+import { stockValido } from '@/lib/inventory';
 
 const schema = z.object({
+  stock_cantidad: z.string().refine(stockValido, 'Ingresa una cantidad entera mayor o igual a 0'),
   nombre: z.string().min(3, 'Ingresa el nombre'),
   precio: z.string().optional().or(z.literal('')),
   descripcion: z.string().optional().or(z.literal('')),
-  modelo: z.string().min(1, 'Selecciona el modelo')
+  modelo: z.string()
 });
 
 type Values = z.infer<typeof schema>;
@@ -29,6 +31,7 @@ export function PartForm({ part }: { part?: Repuesto }) {
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<Values>({
     resolver: zodResolver(schema),
     defaultValues: {
+      stock_cantidad: part?.stock_cantidad == null ? '' : String(part.stock_cantidad),
       nombre: part?.nombre ?? '',
       precio: part?.precio !== null && part?.precio !== undefined ? String(part.precio) : '',
       descripcion: part?.descripcion ?? '',
@@ -55,7 +58,7 @@ export function PartForm({ part }: { part?: Repuesto }) {
     }
 
     try {
-      const baseSlug = `${values.modelo}-${values.nombre}`.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      const baseSlug = part?.slug ?? `${values.modelo}-${values.nombre}`.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
       const uploadedUrls: string[] = [];
       for (const photo of photos) {
         if (photo.file) {
@@ -72,18 +75,19 @@ export function PartForm({ part }: { part?: Repuesto }) {
       }
 
       const payload = {
+        stock_cantidad: values.stock_cantidad === '' ? null : Number(values.stock_cantidad),
         nombre: values.nombre,
         sku: part?.sku ?? baseSlug.toUpperCase().slice(0, 24),
         slug: baseSlug,
-        categoria: 'Accesorios y repuestos',
+        categoria: part?.categoria ?? 'Accesorios y repuestos',
         marca: 'PANTOJA',
         precio: values.precio ? parseFloat(values.precio) : null,
         moneda: 'PEN',
-        stock,
-        compatible_con: [values.modelo],
+        stock: values.stock_cantidad === '' ? stock : Number(values.stock_cantidad) > 0 ? 'Disponible' : stock === 'Bajo pedido' ? 'Bajo pedido' : 'Agotado',
+        compatible_con: values.modelo === (part?.compatible_con?.[0] ?? '') ? (part?.compatible_con ?? []) : values.modelo ? [values.modelo] : [],
         descripcion: values.descripcion || `Accesorio o repuesto para ${values.modelo}.`,
         publicado,
-        destacado: false,
+        destacado: part?.destacado ?? false,
         imagenes: uploadedUrls
       };
 
@@ -112,7 +116,8 @@ export function PartForm({ part }: { part?: Repuesto }) {
             <label>Modelo<select {...register('modelo')}><option value="">Seleccionar</option>{modelosVehiculo.map(m => <option key={m} value={m}>{m}</option>)}</select>{errors.modelo && <em>{errors.modelo.message}</em>}</label>
             <label>Nombre<input {...register('nombre')} placeholder="Ej. Faro delantero" />{errors.nombre && <em>{errors.nombre.message}</em>}</label>
             <label>Precio en soles<input type="number" step="any" {...register('precio')} placeholder="Ej. 180" /></label>
-            <label>Stock<select value={stock} onChange={e => setStock(e.target.value as any)}><option value="Disponible">Disponible</option><option value="Bajo pedido">Bajo pedido</option><option value="Agotado">Agotado</option></select></label>
+            <label>Cantidad en stock<input type="number" min="0" max="2147483647" step="1" {...register('stock_cantidad')} placeholder="Cantidad de unidades" />{errors.stock_cantidad && <em>{errors.stock_cantidad.message}</em>}<small>Deja vacío si aún no has confirmado la cantidad.</small></label>
+            <label>Disponibilidad<select value={stock} onChange={e => setStock(e.target.value as any)}><option value="Disponible">Disponible</option><option value="Bajo pedido">Bajo pedido</option><option value="Agotado">Agotado</option></select></label>
             <label className="full">Descripción opcional<textarea rows={3} {...register('descripcion')} placeholder="Detalle interno o compatibilidad" /></label>
           </div>
         </details>

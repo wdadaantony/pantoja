@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { textoStock } from '@/lib/inventory';
 import { notFound } from 'next/navigation';
 import { PublicHeader } from '@/components/PublicHeader';
 import { PublicFooter } from '@/components/PublicFooter';
@@ -109,6 +110,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             <h1>{p.nombre}</h1>
             <p>{p.descripcion}</p>
             <span className={`stock ${p.stock === 'Disponible' ? 'in' : 'order'}`}>{p.stock}</span>
+            <p className="inventory-quantity">{textoStock(p.stock_cantidad)}</p>
             <strong className="detail-price">{precioLocal(p.precio, p.moneda)}</strong>
             <div className="compatibility">
               <b>Compatible con</b>

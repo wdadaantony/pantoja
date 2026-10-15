@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
+import { textoStock } from '@/lib/inventory';
 import type { Vehiculo } from '@/lib/data';
 import { ordenarVehiculosPorModelo, precioLocal } from '@/lib/data';
 import { createClient } from '@/lib/supabase/client';
@@ -85,6 +86,7 @@ export function AdminVehicleTable({ initial }: { initial: Vehiculo[] }) {
               <th>Vehículo</th>
               <th>Modelo</th>
               <th>Precio</th>
+              <th>Stock</th>
               <th>Estado</th>
               <th>Destacado</th>
               <th>Acciones</th>
@@ -108,6 +110,7 @@ export function AdminVehicleTable({ initial }: { initial: Vehiculo[] }) {
                 </td>
                 <td><span className="model-pill">{v.modelo}</span></td>
                 <td>{precioLocal(v.precio, v.moneda)}</td>
+                <td>{textoStock(v.stock_cantidad)}</td>
                 <td>
                   <button 
                     className={`status-pill ${v.publicado ? 'published' : 'draft'}`} 

@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
+import { textoStock } from '@/lib/inventory';
 import type { Repuesto } from '@/lib/data';
 import { modelosVehiculo, precioLocal } from '@/lib/data';
 import { createClient } from '@/lib/supabase/client';
@@ -56,7 +57,7 @@ export function AdminPartsTable({ initial }: { initial: Repuesto[] }) {
               <tr key={p.id}>
                 <td><div className="table-product">{p.imagenes?.length ? <img src={p.imagenes[0]} alt="" className="table-thumb" style={{ width: '44px', height: '34px', objectFit: 'cover', borderRadius: '4px' }} /> : <span className="table-thumb">⚙</span>}<b>{p.nombre}</b></div></td>
                 <td>{precioLocal(p.precio, p.moneda)}</td>
-                <td><span className={`status-pill ${p.stock === 'Disponible' ? 'published' : 'draft'}`}>{p.stock}</span></td>
+                <td><span className={`status-pill ${p.stock === 'Disponible' ? 'published' : 'draft'}`}>{p.stock}</span><small>{textoStock(p.stock_cantidad)}</small></td>
                 <td>{p.compatible_con.join(', ') || 'Sin modelo'}</td>
                 <td><div className="row-actions"><Link href={`/admin/repuestos/${p.id}/editar`}>Editar</Link><button onClick={() => remove(p)}>Eliminar</button></div></td>
               </tr>

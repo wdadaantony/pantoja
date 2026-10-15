@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { textoStock } from '@/lib/inventory';
 import Image from 'next/image';
 import { Fuel, MessageCircle, Settings2, Users } from 'lucide-react';
 import type { Vehiculo } from '@/lib/data';
@@ -35,6 +36,7 @@ export function VehicleCard({ vehicle }: { vehicle: Vehiculo }) {
           <span><Settings2 size={13}/> {vehicle.transmision || 'Transmisión a consultar'}</span>
           <span><Fuel size={13}/> {vehicle.combustible || 'Combustible a consultar'}</span>
         </div>
+        <p className="inventory-quantity">{textoStock(vehicle.stock_cantidad)}</p>
         <strong>{precioLocal(vehicle.precio, vehicle.moneda)}</strong>
         <a className="card-wa" href={waLink(mensajesWhatsapp.vehiculo(vehicle.nombre))} target="_blank" rel="noreferrer">
           <MessageCircle size={15}/> Cotizar por WhatsApp

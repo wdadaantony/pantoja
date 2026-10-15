@@ -9,6 +9,7 @@ import type { Vehiculo } from '@/lib/data';
 import { fichaVehicularCampos, fichaVehicularSecciones } from '@/lib/data';
 import { fichaCamposBase, valorTecnico } from '@/lib/technical-sheet';
 import { createClient } from '@/lib/supabase/client';
+import { stockValido } from '@/lib/inventory';
 
 function fichaDefault(vehicle: Vehiculo | undefined) {
   const ficha = (vehicle as any)?.ficha_tecnica as Record<string, string> | undefined;
@@ -17,6 +18,7 @@ function fichaDefault(vehicle: Vehiculo | undefined) {
 
 
 const schema = z.object({
+  stock_cantidad: z.string().refine(stockValido, 'Ingresa una cantidad entera mayor o igual a 0'),
   nombre: z.string().min(3, 'Ingresa un nombre de al menos 3 caracteres'),
   slug: z.string().min(3, 'Ingresa un slug válido').regex(/^[a-z0-9-]+$/, 'Usa solo minúsculas, números y guiones'),
   modelo: z.string().min(1, 'Selecciona un modelo'),
@@ -59,6 +61,7 @@ export function VehicleForm({ vehicle }: { vehicle?: Vehiculo }) {
   const { register, handleSubmit, setValue, watch, formState: { errors, isDirty, isSubmitting } } = useForm<Values>({
     resolver: zodResolver(schema),
     defaultValues: {
+      stock_cantidad: vehicle?.stock_cantidad == null ? '' : String(vehicle.stock_cantidad),
       nombre: vehicle?.nombre ?? '',
       slug: vehicle?.slug ?? '',
       modelo: vehicle?.modelo ?? '',
@@ -180,6 +183,7 @@ export function VehicleForm({ vehicle }: { vehicle?: Vehiculo }) {
       );
 
       const payload = {
+        stock_cantidad: values.stock_cantidad === '' ? null : Number(values.stock_cantidad),
         nombre: values.nombre,
         slug: values.slug,
         modelo: values.modelo,
@@ -278,6 +282,7 @@ export function VehicleForm({ vehicle }: { vehicle?: Vehiculo }) {
 
         <div className="form-section-title"><b>Precio</b><small>Monto y moneda para mostrar</small></div>
         <div className="form-grid price-grid">
+          <label>Cantidad en stock<input type="number" min="0" max="2147483647" step="1" {...register('stock_cantidad')} placeholder="Cantidad de unidades" />{errors.stock_cantidad && <em>{errors.stock_cantidad.message}</em>}<small>Deja vacío si aún no has confirmado la cantidad.</small></label>
           <label>
             Monto
             <input type="number" step="any" {...register('precio')} placeholder="Dejar vacío para consultar" />

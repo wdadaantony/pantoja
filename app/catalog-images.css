@@ -98,6 +98,15 @@
   -webkit-user-select: text;
 }
 
+.catalog-card-body > .inventory-quantity {
+  margin: 12px 0 0;
+  color: #333;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
 .login-box button[aria-label="Mostrar contraseña"],
 .login-box button[aria-label="Ocultar contraseña"] {
   width: 40px;
