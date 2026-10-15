@@ -14,7 +14,6 @@ export function ConfigForm({ initial }: { initial: any }) {
   const [promoPopupActiva, setPromoPopupActiva] = useState(initial.promo_popup_activa ?? false);
   const [promoImageFile, setPromoImageFile] = useState<File | null>(null);
   const [promoImageUrl, setPromoImageUrl] = useState<string>(initial.promo_popup_imagen ?? '');
-  const [promoPopupUrl, setPromoPopupUrl] = useState<string>(initial.promo_popup_url ?? '');
 
   async function save(e: React.FormEvent) {
     e.preventDefault();
@@ -65,7 +64,7 @@ export function ConfigForm({ initial }: { initial: any }) {
         activo_banner: formData.get('activo_banner') === 'on',
         promo_popup_activa: promoPopupActiva,
         promo_popup_imagen: finalPromoImageUrl,
-        promo_popup_url: promoPopupUrl
+        promo_popup_url: ''
       };
 
       // 3. Guardar configuración en base de datos
@@ -204,16 +203,7 @@ export function ConfigForm({ initial }: { initial: any }) {
               )}
             </label>
 
-            <label className="full">
-              Enlace de redirección (Opcional)
-              <input 
-                type="url" 
-                value={promoPopupUrl} 
-                onChange={e => setPromoPopupUrl(e.target.value)} 
-                placeholder="Ej: https://wa.me/51952885588?text=Hola,%20quiero%20la%20promocion..." 
-              />
-              <small>Al hacer clic en la promoción, el usuario será redirigido a este enlace (ej: WhatsApp o catálogo).</small>
-            </label>
+
           </div>
         </details>
       </section>

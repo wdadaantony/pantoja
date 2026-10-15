@@ -10,7 +10,6 @@ export function PromotionForm({ initial }: { initial: Promotion }) {
   const [active, setActive] = useState(initial.promo_popup_activa ?? false);
   const [image, setImage] = useState(initial.promo_popup_imagen ?? '');
   const [file, setFile] = useState<File | null>(null);
-  const [url, setUrl] = useState(initial.promo_popup_url ?? '');
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
@@ -20,7 +19,6 @@ export function PromotionForm({ initial }: { initial: Promotion }) {
     setMessage(''); setError(''); setSaving(true);
     try {
       if (publish && !image) throw new Error('Sube una imagen antes de publicar la promoción.');
-      if (url && !['https:', 'http:'].includes(new URL(url).protocol)) throw new Error('El enlace debe empezar por https:// o http://.');
       const client = createClient();
       if (!client) throw new Error('No se pudo conectar con Supabase.');
       let uploadedImage = image;
@@ -31,7 +29,7 @@ export function PromotionForm({ initial }: { initial: Promotion }) {
         if (upload.error) throw upload.error;
         uploadedImage = client.storage.from('productos').getPublicUrl(path).data.publicUrl;
       }
-      const result = await client.from('configuracion').upsert({ id: 1, promo_popup_activa: publish, promo_popup_imagen: uploadedImage, promo_popup_url: url.trim() });
+      const result = await client.from('configuracion').upsert({ id: 1, promo_popup_activa: publish, promo_popup_imagen: uploadedImage, promo_popup_url: '' });
       if (result.error) throw result.error;
       setImage(uploadedImage); setFile(null); setActive(publish);
       await refreshPromotion();
@@ -59,7 +57,6 @@ export function PromotionForm({ initial }: { initial: Promotion }) {
           <small>JPG, PNG o WebP · Máximo 5 MB</small>
         </label>
         {image && <div className="full"><img src={image} alt="Vista previa de la promoción" style={{ maxWidth: '100%', width: 400, maxHeight: 400, objectFit: 'contain' }} /></div>}
-        <label className="full">Enlace al pulsar la promoción (opcional)<input type="url" value={url} onChange={e => setUrl(e.target.value)} placeholder="https://wa.me/51952885588" /></label>
         <div className="full promotion-actions">
           <button className="admin-primary" type="submit" disabled={saving}>{saving ? 'Guardando…' : 'Publicar'}</button>
           {active && <button className="call-button" type="button" disabled={saving} onClick={event => save(event, false)}>Desactivar popup</button>}

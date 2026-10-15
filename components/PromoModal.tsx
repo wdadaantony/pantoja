@@ -8,7 +8,7 @@ type PromoModalProps = {
   url: string;
 };
 
-export function PromoModal({ active, image, url }: PromoModalProps) {
+export function PromoModal({ active, image }: PromoModalProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -108,21 +108,7 @@ export function PromoModal({ active, image, url }: PromoModalProps) {
         </button>
 
         {/* Contenido de la Promoción */}
-        {url ? (
-          <a href={url} target="_blank" rel="noreferrer" style={{ display: 'block', width: '100%' }}>
-            <img 
-              src={image} 
-              alt="Promoción Especial Pantoja" 
-              style={{ width: '100%', height: 'auto', display: 'block', objectFit: 'contain' }} 
-            />
-          </a>
-        ) : (
-          <img 
-            src={image} 
-            alt="Promoción Especial Pantoja" 
-            style={{ width: '100%', height: 'auto', display: 'block', objectFit: 'contain' }} 
-          />
-        )}
+        <img src={image} alt="Promoción Especial Pantoja" style={{ width: '100%', height: 'auto', display: 'block', objectFit: 'contain' }} />
       </div>
     </div>
   );
