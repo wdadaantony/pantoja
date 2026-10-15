@@ -24,7 +24,7 @@ export function VehicleCatalog({ items }: { items: Vehiculo[] }) {
         && (fuel === 'Todos' || v.combustible === fuel);
     });
 
-    if (order === 'recientes') return [...result].sort((a, b) => b.anio - a.anio);
+    if (order === 'recientes') return [...result].sort((a, b) => (b.anio ?? 0) - (a.anio ?? 0));
     if (order === 'precio') return [...result].sort((a, b) => (a.precio ?? Infinity) - (b.precio ?? Infinity));
     return ordenarVehiculosPorModelo(result);
   }, [items, query, model, category, body, fuel, order]);

@@ -11,8 +11,11 @@ import { PartCard } from '@/components/PartCard';
 export const revalidate=30;
 
 const modelos=ordenarVehiculosPorModelo([
-  {nombre:'PANTERA-BUFALIN',modelo:'PANTERA-BUFALIN',tipo:'Combi de techo alto',pasajeros:'Potencia para trabajar',slug:'pantoja-bufalin',imagen:imagenesPorModelo['PANTERA-BUFALIN'][0]},
-  {nombre:'PANTERA-TOANO',modelo:'PANTERA-TOANO',tipo:'Van alargada',pasajeros:'Espacio para grandes rutas',slug:'pantoja-pantera',imagen:imagenesPorModelo['PANTERA-TOANO'][0]},
+  {nombre:'BUFALIN',modelo:'BUFALIN',tipo:'Combi de pasajeros',pasajeros:'Una opción para cada ruta',slug:'pantoja-bufalin',imagen:imagenesPorModelo.BUFALIN[0]},
+  {nombre:'PANTERA-TOANO',modelo:'PANTERA-TOANO',tipo:'Van alargada',pasajeros:'Espacio para grandes rutas',slug:'pantoja-pantera-toano',imagen:imagenesPorModelo['PANTERA-TOANO'][0]},
+  {nombre:'BUFALIN FOTON',modelo:'BUFALIN-FOTON',tipo:'Van de pasajeros',pasajeros:'Consulta equipamiento y capacidad',slug:'pantoja-bufalin-foton',imagen:imagenesPorModelo['BUFALIN-FOTON'][0]},
+  {nombre:'PANTERA',modelo:'PANTERA',tipo:'Minivan de pasajeros',pasajeros:'Una opción para cada ruta',slug:'pantoja-pantera',imagen:imagenesPorModelo.PANTERA[0]},
+  {nombre:'COUSTER URBANO',modelo:'COUSTER-URBANO',tipo:'Transporte urbano',pasajeros:'Consulta equipamiento y capacidad',slug:'pantoja-couster-urbano',imagen:imagenesPorModelo['COUSTER-URBANO'][0]},
   {nombre:'VICTORY',modelo:'VICTORY',tipo:'Minivan compacta',pasajeros:'Ágil para la ciudad',slug:'pantoja-victory',imagen:imagenesPorModelo.VICTORY[0]},
   {nombre:'ZEUS',modelo:'ZEUS',tipo:'Minivan de pasajeros',pasajeros:'Hasta 17 pasajeros',slug:'pantoja-zeus',imagen:imagenesPorModelo.ZEUS[0]},
 ]);
@@ -38,7 +41,7 @@ export default async function Home(){
         <h1>La ruta es tuya.<br/><em>Conquístala.</em></h1>
         <p className="hero-lead">Vehículos creados para trabajar, crecer y llegar más lejos. Atención directa en Arequipa, repuestos originales y respaldo real.</p>
         <div className="hero-actions"><Link className="primary-button" href="/vehiculos">Explorar vehículos <ArrowRight size={18}/></Link><a className="ghost-button" href={wa} target="_blank" rel="noreferrer"><MessageCircle size={17}/> Cotizar ahora</a></div>
-        <div className="hero-proof"><div className="proof-avatars"><span>Z</span><span>P</span><span>B</span><span>V</span></div><span><b>4 modelos exclusivos</b><br/>para transporte, negocio y familia</span></div>
+        <div className="hero-proof"><div className="proof-avatars"><span>Z</span><span>P</span><span>B</span><span>V</span></div><span><b>Explora nuestros modelos</b><br/>para transporte, negocio y familia</span></div>
       </div></div>
       <div className="hero-scroll"><i/> DESLIZA PARA DESCUBRIR</div>
     </section>

@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import { AdminTopbar } from '@/components/AdminTopbar';
 import { PartForm } from '@/components/PartForm';
 import { repuestos as fallbackRepuestos } from '@/lib/data';
-import { supabasePublic } from '@/lib/supabase/public';
+import { createClient } from '@/lib/supabase/server';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,7 +11,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
   let p = fallbackRepuestos.find(x => x.id === id);
 
-  const supabase = supabasePublic;
+  const supabase = await createClient();
   if (supabase) {
     const { data } = await supabase.from('repuestos').select('*').eq('id', id).maybeSingle();
     if (data) p = data as typeof fallbackRepuestos[number];

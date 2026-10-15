@@ -17,21 +17,23 @@ export function VehicleCard({ vehicle }: { vehicle: Vehiculo }) {
             className="catalog-vehicle-image"
             src={vehicle.imagenes[0]} 
             alt={vehicle.nombre} 
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+            loading="lazy"
+            decoding="async"
+            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
           />
         ) : (
           <Image className="catalog-vehicle-image" src="/pantoja-fleet.png" alt={`${vehicle.nombre}, imagen referencial`} fill sizes="(max-width: 700px) 100vw, 33vw"/>
         )}
       </Link>
       <div className="catalog-card-body">
-        <p>{vehicle.categoria} · {vehicle.carroceria ?? 'Carrocería a consultar'} · {vehicle.anio}</p>
+        <p>{[vehicle.categoria, vehicle.carroceria ?? 'Carrocería a consultar', vehicle.anio].filter(Boolean).join(' · ')}</p>
         <h2>
           <Link href={`/vehiculos/${vehicle.slug}`}>{vehicle.nombre}</Link>
         </h2>
         <div className="quick-specs">
-          <span><Users size={13}/> {vehicle.pasajeros} pasajeros</span>
-          <span><Settings2 size={13}/> {vehicle.transmision}</span>
-          <span><Fuel size={13}/> {vehicle.combustible}</span>
+          <span><Users size={13}/> {vehicle.pasajeros ? `${vehicle.pasajeros} pasajeros` : 'Capacidad a consultar'}</span>
+          <span><Settings2 size={13}/> {vehicle.transmision || 'Transmisión a consultar'}</span>
+          <span><Fuel size={13}/> {vehicle.combustible || 'Combustible a consultar'}</span>
         </div>
         <strong>{precioLocal(vehicle.precio, vehicle.moneda)}</strong>
         <a className="card-wa" href={waLink(mensajesWhatsapp.vehiculo(vehicle.nombre))} target="_blank" rel="noreferrer">

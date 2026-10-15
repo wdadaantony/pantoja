@@ -15,7 +15,9 @@ export function PartCard({ part }: { part: Repuesto }) {
           <img 
             src={part.imagenes[0]} 
             alt={part.nombre} 
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+            loading="lazy"
+            decoding="async"
+            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
           />
         ) : (
           <span className="part-icon"><Wrench size={68}/></span>

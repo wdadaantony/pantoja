@@ -1,0 +1,93 @@
+/* Keep catalog products complete and evenly lit on a white studio surface. */
+.catalog-visual,
+.part-visual {
+  background: #fff;
+}
+
+.catalog-visual::after {
+  content: none;
+}
+
+.catalog-visual > img {
+  object-fit: contain;
+  padding: 36px 12px 8px;
+  filter: none;
+}
+
+.catalog-visual .catalog-vehicle-image {
+  object-fit: contain;
+}
+
+.part-visual > img {
+  padding: 42px 16px 12px;
+}
+
+.part-visual .part-icon {
+  color: #6b6b6b;
+  filter: none;
+}
+
+.gallery-wrap,
+.gallery-wrap .main-detail-image,
+.gallery-thumbs {
+  background: #fff;
+}
+
+.product-gallery.part-detail {
+  background: #fff;
+}
+
+.product-gallery.part-detail > img {
+  padding: 36px 16px;
+}
+
+.model-card-v2 {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  color: #151515;
+}
+
+.model-card-v2::after {
+  content: none;
+}
+
+.model-card-v2 > img {
+  position: relative !important;
+  height: 230px !important;
+  object-fit: contain;
+  object-position: center !important;
+  padding: 12px;
+  filter: none;
+  transform: none;
+}
+
+.model-card-v2:hover > img {
+  transform: none;
+}
+
+.model-card-v2 .model-number {
+  display: none;
+}
+
+.model-content-v2 {
+  position: static;
+  padding: 8px 22px 22px;
+}
+
+.model-content-v2 > span {
+  color: #795700;
+}
+
+.model-content-v2 p {
+  color: #555;
+}
+
+.model-actions a:first-child {
+  background: #151515;
+  color: #fff;
+}
+
+.model-actions a:last-child {
+  border-color: #aaa;
+}

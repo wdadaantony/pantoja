@@ -3,6 +3,7 @@ import { Archivo, Oswald } from 'next/font/google';
 import { SiteExperience } from '@/components/SiteExperience';
 import './globals.css';
 import './experience.css';
+import './catalog-images.css';
 
 const archivo = Archivo({ variable: '--font-archivo', subsets: ['latin'] });
 const oswald = Oswald({ variable: '--font-oswald', subsets: ['latin'] });

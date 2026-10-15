@@ -112,7 +112,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             <strong className="detail-price">{precioLocal(p.precio, p.moneda)}</strong>
             <div className="compatibility">
               <b>Compatible con</b>
-              {p.compatible_con.map(x => <span key={x}>{x}</span>)}
+              {p.compatible_con.length ? p.compatible_con.map(x => <span key={x}>{x}</span>) : <span>Consulta compatibilidad con tu modelo</span>}
             </div>
             <div className="detail-actions">
               <a className="card-wa" href={wa} target="_blank" rel="noreferrer">

@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import { AdminTopbar } from '@/components/AdminTopbar';
 import { VehicleForm } from '@/components/VehicleForm';
 import { vehiculos as fallbackVehiculos, normalizarVehiculo } from '@/lib/data';
-import { supabasePublic } from '@/lib/supabase/public';
+import { createClient } from '@/lib/supabase/server';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,7 +11,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
   let v = fallbackVehiculos.map(normalizarVehiculo).find(x => x.id === id);
 
-  const supabase = supabasePublic;
+  const supabase = await createClient();
   if (supabase) {
     const { data } = await supabase.from('vehiculos').select('*').eq('id', id).maybeSingle();
     if (data) v = normalizarVehiculo(data as any);

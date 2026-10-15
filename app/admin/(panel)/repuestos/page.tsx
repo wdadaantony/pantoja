@@ -1,14 +1,14 @@
 import { AdminTopbar } from '@/components/AdminTopbar';
 import { AdminPartsTable } from '@/components/AdminPartsTable';
 import { repuestos as fallbackRepuestos } from '@/lib/data';
-import { supabasePublic } from '@/lib/supabase/public';
+import { createClient } from '@/lib/supabase/server';
 
 export const dynamic = 'force-dynamic';
 
 export default async function Page() {
   let items = fallbackRepuestos;
 
-  const supabase = supabasePublic;
+  const supabase = await createClient();
   if (supabase) {
     const { data } = await supabase.from('repuestos').select('*').order('created_at', { ascending: false });
     if (data) {

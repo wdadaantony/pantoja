@@ -1,7 +1,7 @@
 export type Vehiculo = {
-  id: string; slug: string; nombre: string; modelo: string; categoria: string; anio: number;
+  id: string; slug: string; nombre: string; modelo: string; categoria: string; anio: number | null;
   precio: number | null; moneda: 'USD' | 'PEN'; carroceria?: string; color?: string; caja?: string;
-  carga?: string; euro?: string; pasajeros: number; motor: string; cilindrada: string;
+  carga?: string; euro?: string; pasajeros: number | null; motor: string; cilindrada: string;
   potencia: string; transmision: string; combustible: string; equipamiento: string[]; accesorios?: string[];
   autopartes?: string[]; ficha_tecnica?: Record<string, string>; descripcion: string;
   imagenes: string[]; destacado: boolean; publicado: boolean; disponible_en: string[];
@@ -15,10 +15,15 @@ export type Repuesto = {
 
 export const categoriasVehiculo = ['M1', 'M2', 'M3', 'L1', 'L2', 'L3'] as const;
 export const carroceriasVehiculo = ['Ómnibus', 'Couster', 'Minibus', 'Microbus', 'Minivan'] as const;
-export const modelosVehiculo = ['MUDAM', 'ZEUS', 'PANTERA-TOANO', 'PANTERA-BUFALIN', 'VICTORY'] as const;
+export const modelosVehiculo = ['BUFALIN', 'BUFALIN-FOTON', 'COUSTER-URBANO', 'MUDAM', 'PANTERA', 'PANTERA-TOANO', 'PANTERA-BUFALIN', 'VICTORY', 'ZEUS'] as const;
 
 export const imagenesPorModelo: Record<string, string[]> = {
+  BUFALIN: ['/catalogo/bufalin.webp'],
+  'BUFALIN-FOTON': ['/catalogo/bufalin-foton.webp'],
+  'COUSTER-URBANO': ['/catalogo/couster-urbano.webp'],
+  PANTERA: ['/catalogo/pantera.webp'],
   ZEUS: [
+    '/catalogo/zeus.webp',
     '/vehiculos/zeus/zeus-01.jpeg',
     '/vehiculos/zeus/zeus-02.jpeg',
     '/vehiculos/zeus/zeus-03.jpeg',
@@ -28,6 +33,7 @@ export const imagenesPorModelo: Record<string, string[]> = {
     '/vehiculos/zeus/zeus-07.jpeg'
   ],
   'PANTERA-TOANO': [
+    '/catalogo/pantera-toano.webp',
     '/vehiculos/pantera-toano/pantera-toano-01.jpeg',
     '/vehiculos/pantera-toano/pantera-toano-02.jpeg',
     '/vehiculos/pantera-toano/pantera-toano-03.jpeg',
@@ -37,6 +43,7 @@ export const imagenesPorModelo: Record<string, string[]> = {
     '/vehiculos/pantera-toano/pantera-toano-07.jpeg'
   ],
   'PANTERA-BUFALIN': [
+    '/catalogo/bufalin.webp',
     '/vehiculos/pantera-bufalin/pantera-bufalin-01.jpeg',
     '/vehiculos/pantera-bufalin/pantera-bufalin-02.jpeg',
     '/vehiculos/pantera-bufalin/pantera-bufalin-03.jpeg',
@@ -47,6 +54,7 @@ export const imagenesPorModelo: Record<string, string[]> = {
     '/vehiculos/pantera-bufalin/pantera-bufalin-08.jpeg'
   ],
   VICTORY: [
+    '/catalogo/victory.webp',
     '/vehiculos/victory/victory-01.jpeg',
     '/vehiculos/victory/victory-02.jpeg'
   ]
@@ -205,9 +213,9 @@ export function normalizarVehiculo<T extends Vehiculo>(vehiculo: T): T {
   const modelo = vehiculo.modelo;
   const porModelo: Record<string, Partial<Vehiculo>> = {
     ZEUS: { categoria: 'M2', carroceria: 'Minivan' },
-    PANTERA: { categoria: 'M3', carroceria: 'Minibus', modelo: 'PANTERA-TOANO' },
+    PANTERA: { categoria: 'M3', carroceria: 'Minibus' },
     'PANTERA-TOANO': { categoria: 'M3', carroceria: 'Minibus' },
-    BUFALIN: { categoria: 'M2', carroceria: 'Microbus', modelo: 'PANTERA-BUFALIN' },
+    BUFALIN: { categoria: 'M2', carroceria: 'Microbus' },
     'PANTERA-BUFALIN': { categoria: 'M2', carroceria: 'Microbus' },
     VICTORY: { categoria: 'M1', carroceria: 'Minivan' },
     MUDAM: { categoria: 'M2', carroceria: 'Couster' }
