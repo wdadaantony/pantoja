@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
+import { refreshPromotion } from '@/app/admin/(panel)/promocion/actions';
 
 type Promotion = { promo_popup_activa?: boolean; promo_popup_imagen?: string; promo_popup_url?: string };
 
@@ -14,11 +15,11 @@ export function PromotionForm({ initial }: { initial: Promotion }) {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
-  async function save(event: React.FormEvent) {
+  async function save(event: React.FormEvent, publish: boolean) {
     event.preventDefault();
     setMessage(''); setError(''); setSaving(true);
     try {
-      if (active && !image) throw new Error('Sube una imagen antes de activar la promoción.');
+      if (publish && !image) throw new Error('Sube una imagen antes de publicar la promoción.');
       if (url && !['https:', 'http:'].includes(new URL(url).protocol)) throw new Error('El enlace debe empezar por https:// o http://.');
       const client = createClient();
       if (!client) throw new Error('No se pudo conectar con Supabase.');
@@ -30,21 +31,22 @@ export function PromotionForm({ initial }: { initial: Promotion }) {
         if (upload.error) throw upload.error;
         uploadedImage = client.storage.from('productos').getPublicUrl(path).data.publicUrl;
       }
-      const result = await client.from('configuracion').upsert({ id: 1, promo_popup_activa: active, promo_popup_imagen: uploadedImage, promo_popup_url: url.trim() });
+      const result = await client.from('configuracion').upsert({ id: 1, promo_popup_activa: publish, promo_popup_imagen: uploadedImage, promo_popup_url: url.trim() });
       if (result.error) throw result.error;
-      setImage(uploadedImage); setFile(null);
-      setMessage('Promoción guardada. Los cambios aparecerán en la portada en aproximadamente 30 segundos.');
+      setImage(uploadedImage); setFile(null); setActive(publish);
+      await refreshPromotion();
+      setMessage(publish ? 'Promoción publicada. El popup aparecerá al ingresar a la portada.' : 'Promoción desactivada. El popup ya no se mostrará.');
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : 'No se pudo guardar la promoción.');
     } finally { setSaving(false); }
   }
 
-  return <form className="product-form config-form" onSubmit={save}>
+  return <form className="product-form config-form" onSubmit={event => save(event, true)}>
     <section className="admin-card">
       <h2>Popup de promoción</h2>
       <p>Sube la imagen que verán los visitantes al entrar en la portada.</p>
       <div className="form-grid">
-        <label className="check full"><input type="checkbox" checked={active} onChange={e => setActive(e.target.checked)} /> Mostrar promoción en la portada</label>
+        <p className="full" role="status">Estado: <strong>{active ? 'Publicada' : 'Sin publicar'}</strong></p>
         <label className="full">Imagen de la promoción
           <input type="file" accept="image/jpeg,image/png,image/webp" onChange={e => {
             const selected = e.target.files?.[0];
@@ -58,10 +60,13 @@ export function PromotionForm({ initial }: { initial: Promotion }) {
         </label>
         {image && <div className="full"><img src={image} alt="Vista previa de la promoción" style={{ maxWidth: '100%', width: 400, maxHeight: 400, objectFit: 'contain' }} /></div>}
         <label className="full">Enlace al pulsar la promoción (opcional)<input type="url" value={url} onChange={e => setUrl(e.target.value)} placeholder="https://wa.me/51952885588" /></label>
+        <div className="full promotion-actions">
+          <button className="admin-primary" type="submit" disabled={saving}>{saving ? 'Guardando…' : 'Publicar'}</button>
+          {active && <button className="call-button" type="button" disabled={saving} onClick={event => save(event, false)}>Desactivar popup</button>}
+        </div>
+        {error && <p className="form-error full" role="alert">{error}</p>}
+        {message && <p className="full" role="status">{message}</p>}
       </div>
     </section>
-    {error && <p className="form-error" role="alert">{error}</p>}
-    {message && <p role="status">{message}</p>}
-    <div className="form-actions"><button className="admin-primary" type="submit" disabled={saving}>{saving ? 'Guardando…' : 'Guardar promoción'}</button></div>
   </form>;
 }

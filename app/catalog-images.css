@@ -107,6 +107,24 @@
   text-transform: none;
 }
 
+.promotion-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.promotion-actions .admin-primary {
+  margin: 0;
+  min-height: 44px;
+}
+
+.promotion-actions .call-button {
+  padding: 12px 18px;
+  background: #fff;
+  cursor: pointer;
+}
+
 .login-box button[aria-label="Mostrar contraseña"],
 .login-box button[aria-label="Ocultar contraseña"] {
   width: 40px;
