@@ -9,8 +9,8 @@ import { configuracion } from '@/lib/data';
 import { mensajesWhatsapp, waLink } from '@/lib/whatsapp';
 
 const menuItems=[
-  {href:'/vehiculos',label:'Vehículos',description:'Compara nuestros cuatro modelos exclusivos',icon:CarFront,tone:'red'},
-  {href:'/repuestos',label:'Repuestos',description:'Encuentra piezas originales por modelo y categoría',icon:Wrench,tone:'gold'},
+  {href:'/vehiculos',label:'Vehículos',description:'Conoce los vehículos disponibles',icon:CarFront,tone:'red'},
+  {href:'/repuestos',label:'Repuestos',description:'Consulta nuestros repuestos disponibles',icon:Wrench,tone:'gold'},
   {href:'/nosotros',label:'Nosotros',description:'Conoce la historia y el respaldo de Pantoja',icon:Building2,tone:'dark'},
   {href:'/flash',label:'Flash',description:'Liquidaciones, remates y regalos disponibles',icon:Sparkles,tone:'gold'},
   {href:'/contacto',label:'Contacto',description:'Visítanos en Arequipa',icon:MapPin,tone:'green'},
@@ -31,7 +31,7 @@ export function PublicHeader(){
   return <>
     <div className="topbar"><div className="container topbar-inner"><span><MapPin size={13}/> Arequipa</span><a href={`tel:+51${configuracion.telefono.replace(/\D/g,'')}`}><Phone size={13}/> {configuracion.telefono}</a><span className="topbar-hours"><Clock3 size={13}/> {configuracion.horario}</span></div></div>
     <header className="site-header"><div className="container nav-wrap">
-      <Link href="/" className="brand" aria-label="Pantoja, inicio"><Image src="/logo-dorado.png" alt="Pantoja" width={181} height={136}/></Link>
+      <Link href="/" className="brand" aria-label="PANTOJA MOTORS, inicio"><Image src="/logo-dorado.png" alt="Pantoja" width={181} height={136}/><span className="brand-motors">MOTORS</span></Link>
       <nav className="desktop-nav" aria-label="Navegación principal">{menuItems.slice(0,2).map(item=><Link key={item.href} href={item.href} className={pathname.startsWith(item.href)?'active':''}>{item.label}</Link>)}<button className={`explore-trigger ${isOpen?'active':''}`} onClick={()=>setIsOpen(value=>!value)} aria-expanded={isOpen} aria-controls="explore-menu">Explorar <ChevronDown size={14}/></button></nav>
       <a className="wa-button wa-header" href={wa} target="_blank" rel="noreferrer"><MessageCircle size={18}/><span>Hablar con un asesor</span></a>
       <button className={`menu-toggle ${isOpen?'active':''}`} onClick={()=>setIsOpen(value=>!value)} aria-label={isOpen?'Cerrar menú':'Abrir menú'} aria-expanded={isOpen}>{isOpen?<X/>:<Menu/>}<span>Menú</span></button>

@@ -8,7 +8,7 @@ import { supabasePublic } from '@/lib/supabase/public';
 export const revalidate = 30;
 
 export const metadata: Metadata = {
-  title: 'Repuestos originales | Pantoja',
+  title: 'Repuestos originales',
   description: 'Repuestos originales para vehículos Pantoja. Consulta disponibilidad por WhatsApp.'
 };
 

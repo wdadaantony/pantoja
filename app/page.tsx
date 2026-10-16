@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, BadgeCheck, CarFront, Headphones, MapPin, MessageCircle, PackageCheck, ShieldCheck, Sparkles, Users, Wrench } from 'lucide-react';
@@ -9,6 +10,7 @@ import { PublicFooter } from '@/components/PublicFooter';
 import { PartCard } from '@/components/PartCard';
 
 export const revalidate=30;
+export const metadata: Metadata = { alternates: { canonical: 'https://pantojachina.com' } };
 
 const modelos=ordenarVehiculosPorModelo([
   {nombre:'BUFALIN',modelo:'BUFALIN',tipo:'Combi de pasajeros',pasajeros:'Una opción para cada ruta',slug:'pantoja-bufalin',imagen:imagenesPorModelo.BUFALIN[0]},
@@ -37,7 +39,7 @@ export default async function Home(){
     <section className="hero hero-v2" id="inicio">
       <div className="hero-media"><Image src="/pantoja-hero.jpeg" alt="Gama de vans y minivans Pantoja en carretera" fill priority sizes="100vw"/><div className="hero-noise"/></div>
       <div className="container hero-content"><div className="hero-copy">
-        <div className="hero-kicker"><span>MODELOS 2026</span><small>MARCA EXCLUSIVA PERUANA</small></div>
+        <div className="hero-kicker"><span>PANTOJA MOTORS</span><small>MARCA EXCLUSIVA PERUANA</small></div>
         <h1>La ruta es tuya.<br/><em>Conquístala.</em></h1>
         <p className="hero-lead">Vehículos creados para trabajar, crecer y llegar más lejos. Atención directa en Arequipa, repuestos originales y respaldo real.</p>
         <div className="hero-actions"><Link className="primary-button" href="/vehiculos">Explorar vehículos <ArrowRight size={18}/></Link><a className="ghost-button" href={wa} target="_blank" rel="noreferrer"><MessageCircle size={17}/> Cotizar ahora</a></div>

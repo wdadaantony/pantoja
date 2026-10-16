@@ -27,7 +27,7 @@ export function VehicleCard({ vehicle }: { vehicle: Vehiculo }) {
         )}
       </Link>
       <div className="catalog-card-body">
-        <p>{[vehicle.categoria, vehicle.carroceria ?? 'Carrocería a consultar', vehicle.anio].filter(Boolean).join(' · ')}</p>
+        <p>{[vehicle.carroceria, vehicle.anio].filter(Boolean).join(' · ')}</p>
         <h2>
           <Link href={`/vehiculos/${vehicle.slug}`}>{vehicle.nombre}</Link>
         </h2>

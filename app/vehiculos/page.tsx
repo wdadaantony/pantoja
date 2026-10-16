@@ -8,7 +8,7 @@ import { supabasePublic } from '@/lib/supabase/public';
 export const revalidate = 30;
 
 export const metadata: Metadata = {
-  title: 'Catálogo de vehículos | Pantoja',
+  title: 'Catálogo de vehículos',
   description: 'Explora minivans, combis y vans Pantoja disponibles en Arequipa.'
 };
 

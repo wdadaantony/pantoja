@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   if (!v) return {};
   return {
-    title: `${v.nombre} | Pantoja`,
+    title: v.nombre,
     description: v.descripcion,
     openGraph: {
       title: `${v.nombre} | Pantoja`,
@@ -116,7 +116,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           </div>
           
           <div className="product-info">
-            <p className="eyebrow dark"><span /> {v.categoria} · {v.carroceria ?? 'Carrocería a consultar'} · {v.anio}</p>
+            <p className="eyebrow dark"><span /> {[v.carroceria, v.anio].filter(Boolean).join(' · ')}</p>
             <h1>{v.nombre}</h1>
             <p>{v.descripcion}</p>
             <p className="inventory-quantity">{textoStock(v.stock_cantidad)}</p>

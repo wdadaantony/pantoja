@@ -4,6 +4,33 @@
   background: #fff;
 }
 
+.catalog-layout.catalog-simple {
+  display: block;
+  padding-top: 32px;
+}
+
+.site-header .brand {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0;
+}
+
+.site-header .brand img {
+  height: 56px;
+  width: 100px;
+  object-fit: contain;
+}
+
+.brand-motors {
+  color: var(--gold-light);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .2em;
+  line-height: 1;
+}
+
 .catalog-visual::after {
   content: none;
 }
